@@ -28,6 +28,15 @@ class BaseSource {
   }
 
   /**
+   * Get command required permissions based on source
+   * @param command
+   * @returns {*}
+   */
+  getCommandPermissions(command) {
+    return command.constructor.getRequiredDiscordPermissions();
+  }
+
+  /**
    * Default command prefix
    * @returns {string}
    * @constructor

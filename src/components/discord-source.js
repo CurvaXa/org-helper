@@ -30,6 +30,10 @@ class DiscordSource extends BaseSource {
   get name() {
     return BotTable.DISCORD_SOURCE;
   }
+
+  getCommandPermissions(command) {
+    return command.constructor.getRequiredDiscordPermissions();
+  }
 }
 
 module.exports = DiscordSource;

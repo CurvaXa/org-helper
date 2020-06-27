@@ -10,12 +10,12 @@ console.log('OrgHelper startup');
 const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const Discord = require('discord.js');
+const DiscordModule = require('./discord-module.js');
 
 const OhUtils = require('./utils/bot-utils');
-const BaseMessage = require('./components/base-message');
 const PrefsManager = require('./managers/prefs-manager');
 const Context = require('./managers/context');
-const DiscordSource = require('./components/discord-source');
+
 const prefsPath = path.join(__dirname, '..', 'preferences.txt');
 const localizationPath = path.join(__dirname, '..', 'localization');
 
@@ -26,7 +26,6 @@ const prefsManager = new PrefsManager(prefsPath);
 prefsManager.readPrefs();
 
 const c = new Context(prefsManager, localizationPath, client);
-const discordSource = new DiscordSource(client);
 
 c.log.i('Context created.');
 
@@ -63,56 +62,6 @@ MongoClient.connect(dbConnectionString, async (err, db) => {
     db.close();
   });
 
-  client.on('ready', async () => {
-    try {
-      c.log.i('Servers:');
-      const guildsArray = client.guilds.cache.array();
-      const updateResults = [];
-      for (const guild of guildsArray) {
-        c.log.i(' - ' + guild.name);
-        updateResults.push(c.dbManager.updateGuild(guild));
-      }
-
-      await Promise.all(updateResults);
-      await c.dbManager.updateGuilds(client.guilds.cache);
-
-      c.discordClientReady = true;
-
-      await c.scheduler.syncTasks();
-    } catch (error) {
-      c.log.f('client on ready error: ' + error + '; stack: ' + error.stack);
-    }
-  });
-
-  client.on('message', async discordMessage => {
-    if (!c.discordClientReady) {
-      c.log.w('on message: the client is not ready');
-      return;
-    }
-
-    try {
-      const message = BaseMessage.createFromDiscord(discordMessage, discordSource);
-      await c.dbManager.updateGuilds(client.guilds.cache);
-      await c.scheduler.syncTasks();
-
-      if (message.originalMessage.guild !== undefined && message.originalMessage.guild !== null) {
-        await c.dbManager.updateGuild(message.originalMessage.guild);
-
-        let processed = false;
-        if (message.userId !== client.user.id) {
-          processed = await c.commandsParser.processMessage(message);
-          if (!processed) {
-            c.messageModerator.premoderateDiscordMessage(message);
-          }
-        }
-      } else {
-        // The null guild means it's a private ("DM") message
-        await c.commandsParser.parsePrivateDiscordCommand(message);
-      }
-    } catch (error) {
-      c.log.e('client on message error: ' + error + '; stack: ' + error.stack);
-    }
-  });
-
-  client.login(c.prefsManager.discord_token);
+  const discordModule = new DiscordModule(c);
+  discordModule.run();
 });
