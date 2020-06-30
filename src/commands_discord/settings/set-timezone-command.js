@@ -63,7 +63,7 @@ class SetTimezoneCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return SetTimezoneCommandArgDefs;
   }
 
@@ -121,7 +121,7 @@ class SetTimezoneCommand extends DiscordCommand {
     // Inherited function with various possible implementations, some args may be unused.
     /* eslint no-unused-vars: ["error", { "args": "none" }] */
     await this.context.dbManager.setSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.timezone.name,
       this.timezone

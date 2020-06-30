@@ -253,6 +253,16 @@
   "command_reminders_reminder": "Напоминание с номером = %d; расписание: %s; канал: %s; текст сообщения: %s\n",
 
 
+  "command_createrole_name": "createrole",
+  "command_createrole_help": "Create new role.",
+
+  "command_createrole_arg_roleName_alias_roleName": "roles",
+  "command_createrole_arg_roleName_alias_r": "r",
+  "command_createrole_arg_roleName_help": "The role name to create",
+
+  "command_createrole_success": "Role %s created",
+  "command_createrole_missing_permissions": "%s role(s) were not created, because the bot's role has no permissions to manage roles. Check the bot's role settings.",
+
   "command_removerole_name": "убратьроль",
   "command_removerole_help": "Убирает роль(роли) с участника(ов).",
 

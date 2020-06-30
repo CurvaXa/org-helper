@@ -56,7 +56,7 @@ class HelpCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return HelpCommandArgDefs;
   }
 
@@ -85,7 +85,7 @@ class HelpCommand extends DiscordCommand {
     let result = '';
 
     const currentPrefix = await this.context.dbManager.getSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.commandPrefix.name,
       message.source.DEFAULT_COMMAND_PREFIX
@@ -135,7 +135,7 @@ class HelpCommand extends DiscordCommand {
         result = this.langManager.getString('command_help_wrong_command', suggestedCommands.join(', '));
       } else {
         result = selectedCommand.getHelpText(this.context, this.langManager) + '\n';
-        const argsArray = Object.values(selectedCommand.getDefinedArgs());
+        const argsArray = Object.values(selectedCommand.createForOrg(this.context,this.source,this.langManager,this.orgId).getDefinedArgs());
         for (const arg of argsArray) {
           let aliases = '';
           for (let j = 0; j < arg.aliasIds.length; j++) {
@@ -153,7 +153,7 @@ class HelpCommand extends DiscordCommand {
 
   async getHelpCommandString(commandName, source) {
     const currentPrefix = await this.context.dbManager.getSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.commandPrefix.name,
       source.DEFAULT_COMMAND_PREFIX

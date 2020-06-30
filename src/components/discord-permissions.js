@@ -44,6 +44,20 @@ class DiscordPermissions extends Permissions {
   static get ALL_PERMISSIONS() {
     return ALL_PERMISSIONS;
   }
+
+  hasPermissionInChannel(member, channel, permission) {
+    return member.permissionsIn(channel).has(permission);
+  }
+
+  getCommandPermissions(command) {
+    return command.constructor.getRequiredDiscordPermissions();
+  }
+
+  getMemberRoleIds(member) {
+    return member.roles.cache.array().map(r => r.id);
+  }
+
+
 }
 
 module.exports = DiscordPermissions;

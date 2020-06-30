@@ -1,5 +1,5 @@
 'use strict';
-
+const DiscordPermissions = require('./discord-permissions');
 const DiscordUtils = require('../utils/discord-utils');
 const BaseSource = require('./base-source');
 const BotTable = require('../mongo_classes/bot-table');
@@ -12,6 +12,7 @@ class DiscordSource extends BaseSource {
   constructor(client) {
     super(client);
     this.commandManager = new DiscordCommandManager();
+    this.permissions = new DiscordPermissions();
   }
 
   /**
@@ -34,6 +35,13 @@ class DiscordSource extends BaseSource {
   getCommandPermissions(command) {
     return command.constructor.getRequiredDiscordPermissions();
   }
+
+  async executeCommand(command,message) {
+    return await command.executeForDiscord(message);
+  }
 }
+
+
+
 
 module.exports = DiscordSource;

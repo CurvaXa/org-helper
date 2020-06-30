@@ -56,7 +56,7 @@ class SetCensoringCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return SetCensoringCommandArgDefs;
   }
 
@@ -102,7 +102,7 @@ class SetCensoringCommand extends DiscordCommand {
     }
 
     await this.context.dbManager.setSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.censoring.name,
       value

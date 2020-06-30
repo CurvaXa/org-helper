@@ -60,7 +60,7 @@ class DenyRemindCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return DenyRemindCommandArgDefs;
   }
 

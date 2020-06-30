@@ -290,10 +290,10 @@ class PermissionsManager {
    * @return {Promise}                        nothing
    */
   async checkDiscordPermissions(message, command) {
-    const requiredDiscordPermissions = message.source.getCommandPermissions();
+    const requiredDiscordPermissions = message.source.permissions.getCommandPermissions(command);
 
     for (const permission of requiredDiscordPermissions) {
-      if (!message.originalMessage.member.permissionsIn(message.originalMessage.channel).has(permission)) {
+      if (!message.source.permissions.hasPermissionInChannel(message.member, message.channel, permission)) {
         this.context.log.w(
           'Attempt to use command ' + command.constructor.getCommandInterfaceName() + ' by user ' + message.userId
         );
@@ -314,13 +314,12 @@ class PermissionsManager {
    * @return {Promise}                        nothing
    */
   async checkDiscordCommandPermissions(message, command) {
-    const roleIds = message.originalMessage.member.roles.cache.array().map(r => r.id);
+    const roleIds = message.source.permissions.getMemberRoleIds(message.member);
 
     if (
       this.context.prefsManager.bypass_bot_permissions_for_discord_admins !== 'true' ||
-      !message.originalMessage.member
-        .permissionsIn(message.originalMessage.channel)
-        .has(DiscordPermissions.ADMINISTRATOR)
+      !message.source.permissions.hasPermissionInChannel(message.member, message.channel,
+        message.source.permissions.ADMINISTRATOR)
     ) {
       await this.checkBotPermissions(message.userId, roleIds, command, message.source.name);
     }
@@ -334,9 +333,8 @@ class PermissionsManager {
    * @return {Boolean}                 true if admin, false otherwise
    */
   isAuthorAdmin(message) {
-    return message.originalMessage.member
-      .permissionsIn(message.originalMessage.channel)
-      .has(DiscordPermissions.ADMINISTRATOR);
+    return message.source.permissions.hasPermissionInChannel(message.member, message.channel,
+      message.source.permissions.ADMINISTRATOR);
   }
 }
 

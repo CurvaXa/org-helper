@@ -54,7 +54,7 @@ class SettingsCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return SettingsCommandArgDefs;
   }
 
@@ -144,8 +144,8 @@ class SettingsCommand extends DiscordCommand {
     dbFunc = dbFunc.bind(this.context.dbManager);
     if (this.setting !== null) {
       const value = includeUser
-        ? await dbFunc(this.source, this.orgId, message.userId, availableSettings[this.setting].name)
-        : await dbFunc(this.source, this.orgId, availableSettings[this.setting].name);
+        ? await dbFunc(this.source.name, this.orgId, message.userId, availableSettings[this.setting].name)
+        : await dbFunc(this.source.name, this.orgId, availableSettings[this.setting].name);
       if (value !== undefined) {
         return this.langManager.getString(availableSettings[this.setting].textId) + ' : ' + value;
       }
@@ -163,8 +163,8 @@ class SettingsCommand extends DiscordCommand {
 
       getResults.push(
         (includeUser
-          ? dbFunc(this.source, this.orgId, message.userId, availableSettings[settingKey].name)
-          : dbFunc(this.source, this.orgId, availableSettings[settingKey].name)
+          ? dbFunc(this.source.name, this.orgId, message.userId, availableSettings[settingKey].name)
+          : dbFunc(this.source.name, this.orgId, availableSettings[settingKey].name)
         ).then(value => {
           if (value !== undefined) {
             result = result + this.langManager.getString(availableSettings[settingKey].textId) + ' : ' + value + '\n';

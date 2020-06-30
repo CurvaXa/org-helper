@@ -111,7 +111,7 @@ class ArgValidationTree {
    * @param  {Command}  command the command to validate
    */
   static async validateCommandArguments(command) {
-    const args = Object.values(command.constructor.getDefinedArgs());
+    const args = Object.values(command.getDefinedArgs());
 
     const results = [];
     for (const argDef of args) {

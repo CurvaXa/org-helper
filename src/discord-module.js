@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseMessage = require('./components/base-message');
+const DiscordMessage = require('./components/discord-message');
 const DiscordSource = require('./components/discord-source');
 
 class DiscordModule {
@@ -40,7 +40,7 @@ class DiscordModule {
       }
 
       try {
-        const message = BaseMessage.createFromDiscord(discordMessage, discordSource);
+        const message = new DiscordMessage(discordMessage, discordSource);
         await this.c.dbManager.updateGuilds(this.client.guilds.cache);
         await this.c.scheduler.syncTasks();
 

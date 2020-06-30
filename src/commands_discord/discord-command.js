@@ -44,6 +44,15 @@ class DiscordCommand extends Command {
   }
 
   /**
+   * Gets the array of defined Slack permission filters for the command.
+   * Source-independent permissions (e.g. stored in the Bot's DB) should be defined in another place.
+   * @return {Array<string>} the array of Slack-specific permissions required
+   */
+  static getRequiredSlackPermissions() {
+    return [];
+  }
+
+  /**
    * Gets the default value for a given argument definition.
    * Used when unable to scan the argument from the command's text.
    * @param  {Context}        context the Bot's context
@@ -83,6 +92,13 @@ class DiscordCommand extends Command {
     /* eslint no-unused-vars: ["error", { "args": "none" }] */
     throw new Error('executeForDiscord: ' + this.constructor.name + ' is an abstract class.');
   }
+
+  async executeForSlack(message) {
+    // Inherited function with various possible implementations, some args may be unused.
+    /* eslint no-unused-vars: ["error", { "args": "none" }] */
+    throw new Error('executeForSlack: ' + this.constructor.name + ' is an abstract class.');
+  }
+
 
   /**
    * Extract text for a given argument from command's string during scanning by arg name.
@@ -133,7 +149,7 @@ class DiscordCommand extends Command {
    * @return {Promise}                 nothing
    */
   async parseFromDiscordByNames(message) {
-    const definedArgs = this.constructor.getDefinedArgs();
+    const definedArgs = this.getDefinedArgs();
     const argsKeys = Object.keys(definedArgs);
     const thiz = this;
 
@@ -186,7 +202,7 @@ class DiscordCommand extends Command {
    * @return {Promise}                 nothing
    */
   async parseFromDiscordSequentially(message) {
-    const definedArgs = this.constructor.getDefinedArgs();
+    const definedArgs = this.getDefinedArgs();
     const argsKeys = Object.keys(definedArgs);
 
     const trimmedContent = OhUtils.dry(message.content);

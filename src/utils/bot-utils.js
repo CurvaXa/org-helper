@@ -10,7 +10,7 @@ const stringSimilarity = require('string-similarity');
 
 const MongoProtocol = 'mongodb';
 
-const QuotesSymbols = Object.freeze(['"', "'"]);
+const QuotesSymbols = Object.freeze(['"', '\'']);
 const DefaultIdColumn = 'id';
 const AnyValue = '-1';
 const MaxInt32 = 2147483647;
@@ -301,6 +301,25 @@ class Utils {
     }
 
     return suggestions;
+  }
+
+  static splitText(text, maxLength) {
+    const result = [];
+    let remainingText = text;
+    while (remainingText.length > maxLength) {
+      let nextPart = remainingText.slice(0, Math.max(0, maxLength));
+      const lastLineSymbol = nextPart.lastIndexOf('\n');
+      if (lastLineSymbol >= 0) {
+        nextPart = nextPart.slice(0, Math.max(0, lastLineSymbol));
+        remainingText = remainingText.slice(Math.max(0, lastLineSymbol + 1));
+      } else {
+        remainingText = remainingText.slice(Math.max(0, maxLength));
+      }
+      result.push(nextPart);
+    }
+    result.push(remainingText);
+
+    return result;
   }
 }
 

@@ -61,7 +61,7 @@ class SetMyTimezoneCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return SetMyTimezoneCommandArgDefs;
   }
 
@@ -121,7 +121,7 @@ class SetMyTimezoneCommand extends DiscordCommand {
     /* eslint no-unused-vars: ["error", { "args": "none" }] */
     if (this.timezone === null) {
       await this.context.dbManager.removeUserSetting(
-        this.source,
+        this.source.name,
         this.orgId,
         message.userId,
         UserSettingsTable.USER_SETTINGS.timezone.name
@@ -135,7 +135,7 @@ class SetMyTimezoneCommand extends DiscordCommand {
     }
 
     await this.context.dbManager.setUserSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       message.userId,
       UserSettingsTable.USER_SETTINGS.timezone.name,

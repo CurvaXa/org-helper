@@ -10,7 +10,9 @@ console.log('OrgHelper startup');
 const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const Discord = require('discord.js');
+
 const DiscordModule = require('./discord-module.js');
+const SlackModule = require('./slack-module.js');
 
 const OhUtils = require('./utils/bot-utils');
 const PrefsManager = require('./managers/prefs-manager');
@@ -62,6 +64,7 @@ MongoClient.connect(dbConnectionString, async (err, db) => {
     db.close();
   });
 
-  const discordModule = new DiscordModule(c);
-  discordModule.run();
+  (new DiscordModule(c)).run();
+  (new SlackModule(c)).run();
+
 });

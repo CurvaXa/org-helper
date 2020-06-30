@@ -6,6 +6,8 @@
  * @license MIT (see the root LICENSE file for details)
  */
 
+const Utils = require('./bot-utils');
+
 const DiscordMentionStart = '<';
 const DiscordMentionEnd = '>';
 const DiscordChannelPrefix = '#';
@@ -115,24 +117,11 @@ class DiscordUtils {
    * @return {Promise}                 nothing
    */
   static async sendToTextChannel(discordChannel, text) {
-    let remainingText = text;
-    while (remainingText.length > MaxTextLength) {
-      let nextPart = remainingText.slice(0, Math.max(0, MaxTextLength));
-      const lastLineSymbol = nextPart.lastIndexOf('\n');
-      if (lastLineSymbol >= 0) {
-        nextPart = nextPart.slice(0, Math.max(0, lastLineSymbol));
-        remainingText = remainingText.slice(Math.max(0, lastLineSymbol + 1));
-      } else {
-        remainingText = remainingText.slice(Math.max(0, MaxTextLength));
-      }
-
-      // Must preserve the order of messages, so ignoring the warning about parallel processing.
-      /* eslint-disable no-await-in-loop */
-      await discordChannel.send(nextPart);
-      /* eslint-enable no-await-in-loop */
+    async function sendText(textBlock) {
+      return await discordChannel.send(textBlock);
     }
+    return Utils.splitText(text,MaxTextLength).map(text => sendText(text));
 
-    await discordChannel.send(remainingText);
   }
 }
 

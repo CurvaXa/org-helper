@@ -71,7 +71,7 @@ class BadWordsCommand extends DiscordCommand {
     // Inherited function with various possible implementations, some args may be unused.
     /* eslint no-unused-vars: ["error", { "args": "none" }] */
     const currentWordsString = await this.context.dbManager.getSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.badwords.name,
       ''

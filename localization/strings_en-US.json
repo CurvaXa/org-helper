@@ -252,6 +252,19 @@
   "command_reminders_no_reminders": "No reminders found.",
   "command_reminders_reminder": "Reminder id = %d; time: %s; channel: %s; message: %s\n",
 
+  "command_createrole_name": "createrole",
+  "command_createrole_help": "Create new role.",
+
+  "command_createrole_arg_roleNames_alias_roleNames": "roles",
+  "command_createrole_arg_roleNames_alias_r": "r",
+  "command_createrole_arg_roleNames_help": "The role name to create",
+
+  "command_createrole_arg_parentRoleName_alias_parentRoleName": "parent",
+  "command_createrole_arg_parentRoleName_alias_r": "p",
+  "command_createrole_arg_parentRoleName_help": "Parent role name",
+
+  "command_createrole_success": "Role %s created",
+  "command_createrole_missing_permissions": "%s role(s) were not created, because the bot's role has no permissions to manage roles. Check the bot's role settings.",
 
   "command_removerole_name": "removerole",
   "command_removerole_help": "Removes role(s) from specified member(s).",

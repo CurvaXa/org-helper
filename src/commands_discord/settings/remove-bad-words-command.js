@@ -53,7 +53,7 @@ class RemoveBadWordsCommand extends DiscordCommand {
    * Gets the array of all arguments definitions of the command.
    * @return {Array<CommandArgDef>} the array of definitions
    */
-  static getDefinedArgs() {
+  getDefinedArgs() {
     return RemoveBadWordsommandArgDefs;
   }
 
@@ -89,7 +89,7 @@ class RemoveBadWordsCommand extends DiscordCommand {
     // Inherited function with various possible implementations, some args may be unused.
     /* eslint no-unused-vars: ["error", { "args": "none" }] */
     const currentWordsString = await this.context.dbManager.getSetting(
-      this.source,
+      this.source.name,
       this.orgId,
       ServerSettingsTable.SERVER_SETTINGS.badwords.name,
       ''
@@ -122,7 +122,7 @@ class RemoveBadWordsCommand extends DiscordCommand {
         })
         .join(ArrayArgScanner.ARRAY_SEPARATOR);
       await this.context.dbManager.setSetting(
-        this.source,
+        this.source.name,
         this.orgId,
         ServerSettingsTable.SERVER_SETTINGS.badwords.name,
         newWordsString

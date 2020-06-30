@@ -221,7 +221,7 @@ class CommandsParser {
 
     let result;
     try {
-      result = await command.executeForDiscord(message);
+      result = await message.source.executeCommand(command,message);
     } catch (error) {
       this.context.log.w(
         'executeCommand: failed to execute command: "' +
@@ -298,7 +298,7 @@ class CommandsParser {
    * @return {Promise<DiscordCommand>}                         the command object with all arguments set up
    */
   async tryParseDiscordCommand(commandClass, message, commandLangManager) {
-    const command = commandClass.createForOrg(this.context, message.source.name, commandLangManager, message.orgId);
+    const command = commandClass.createForOrg(this.context, message.source, commandLangManager, message.orgId);
 
     try {
       await command.parseFromDiscord(message);
